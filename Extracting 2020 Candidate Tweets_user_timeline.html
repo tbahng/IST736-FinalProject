@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head><meta charset="utf-8" />
-<title>Extracting 2020 Candidate Tweets</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
+<title>Extracting 2020 Candidate Tweets_user_timeline</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 
 <style type="text/css">
@@ -11870,57 +11870,6 @@ div#notebook {
         <span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;Problem Connecting to API with OAuth&quot;</span><span class="p">)</span>
         <span class="c1"># return the Twitter api object that allows access for the Tweepy api functions</span>
     <span class="k">return</span> <span class="n">tweepy_api</span>
-
-<span class="k">def</span> <span class="nf">get_tweets_timeline</span><span class="p">(</span><span class="n">api</span><span class="p">,</span> <span class="n">who</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">max_results</span><span class="o">=</span><span class="mi">20</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Uses the tweepy Cursor to wrap a twitter api search for the query string</span>
-<span class="sd">    This function uses the user_timeline method for the API.</span>
-<span class="sd">    includes all tweets from user_timeline</span>
-<span class="sd">    returns tweets as json formatted results</span>
-<span class="sd">    Arguments:</span>
-<span class="sd">        api {[tweepy.api.API]} -- [tweepy api]</span>
-<span class="sd">        who {[str]} -- [specified twitter handle]</span>
-<span class="sd">    </span>
-<span class="sd">    Keyword Arguments:</span>
-<span class="sd">        start {str} -- [timeframe start e.g. &#39;20200411&#39;]</span>
-<span class="sd">        end {str} -- [timeframe end e.g. &#39;20200412&#39;]</span>
-<span class="sd">        max_results {int} -- [number of tweets] (default: {20})</span>
-<span class="sd">    </span>
-<span class="sd">    Returns:</span>
-<span class="sd">        [list] -- [list of dictionaries where each element is a tweet]</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">start</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="s1">&#39;%Y%m</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">)</span>
-    <span class="n">end</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">end</span><span class="p">,</span> <span class="s1">&#39;%Y%m</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">)</span>
-    <span class="c1"># the first search initializes a cursor, stored in the metadata results,</span>
-    <span class="c1"># that allows next searches to return additional tweets</span>
-    <span class="n">search_results</span> <span class="o">=</span> <span class="p">[</span><span class="n">status</span> <span class="k">for</span> <span class="n">status</span> <span class="ow">in</span> <span class="n">tweepy</span><span class="o">.</span><span class="n">Cursor</span><span class="p">(</span><span class="n">api</span><span class="o">.</span><span class="n">user_timeline</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="n">who</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="n">max_results</span><span class="p">)</span> <span class="k">if</span> <span class="n">status</span><span class="o">.</span><span class="n">created_at</span> <span class="o">&lt;</span> <span class="n">end</span> <span class="ow">and</span> <span class="n">status</span><span class="o">.</span><span class="n">created_at</span> <span class="o">&gt;</span> <span class="n">start</span><span class="p">]</span>  
-    <span class="c1"># for each tweet, get the json representation</span>
-    <span class="n">tweets</span> <span class="o">=</span> <span class="p">[</span><span class="n">tweet</span><span class="o">.</span><span class="n">_json</span> <span class="k">for</span> <span class="n">tweet</span> <span class="ow">in</span> <span class="n">search_results</span><span class="p">]</span>  
-    <span class="k">return</span> <span class="n">tweets</span>
-
-<span class="k">def</span> <span class="nf">get_tweets_search</span><span class="p">(</span><span class="n">api</span><span class="p">,</span> <span class="n">who</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">max_results</span><span class="o">=</span><span class="mi">20</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Uses the tweepy Cursor to wrap a twitter api search for the query string</span>
-<span class="sd">    This function uses the search method for the API.</span>
-<span class="sd">    includes only tweets by the specified user; excludes retweets and tweets from unspecified users</span>
-<span class="sd">    returns tweets json formatted results</span>
-<span class="sd">    Arguments:</span>
-<span class="sd">        api {[tweepy.api.API]} -- [tweepy api]</span>
-<span class="sd">        who {[str]} -- [specified twitter handle]</span>
-<span class="sd">    </span>
-<span class="sd">    Keyword Arguments:</span>
-<span class="sd">        start {str} -- [timeframe start e.g. &#39;2020-04-11&#39;]</span>
-<span class="sd">        end {str} -- [timeframe end e.g. &#39;2020-04-12&#39;]</span>
-<span class="sd">        max_results {int} -- [number of tweets] (default: {20})</span>
-<span class="sd">    </span>
-<span class="sd">    Returns:</span>
-<span class="sd">        [list] -- [list of dictionaries where each element is a tweet]</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;from:</span><span class="si">{:s}</span><span class="s2"> -filter:retweets since:</span><span class="si">{:s}</span><span class="s2"> until:</span><span class="si">{:s}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">()</span>
-    <span class="c1"># the first search initializes a cursor, stored in the metadata results,</span>
-    <span class="c1"># that allows next searches to return additional tweets</span>
-    <span class="n">search_results</span> <span class="o">=</span> <span class="p">[</span><span class="n">status</span> <span class="k">for</span> <span class="n">status</span> <span class="ow">in</span> <span class="n">tweepy</span><span class="o">.</span><span class="n">Cursor</span><span class="p">(</span><span class="n">api</span><span class="o">.</span><span class="n">search</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="n">query</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="n">max_results</span><span class="p">)]</span>  
-    <span class="c1"># for each tweet, get the json representation</span>
-    <span class="n">tweets</span> <span class="o">=</span> <span class="p">[</span><span class="n">tweet</span><span class="o">.</span><span class="n">_json</span> <span class="k">for</span> <span class="n">tweet</span> <span class="ow">in</span> <span class="n">search_results</span><span class="p">]</span>  
-    <span class="k">return</span> <span class="n">tweets</span>    
 
 <span class="k">def</span> <span class="nf">get_handle_data</span><span class="p">(</span><span class="n">api</span><span class="p">,</span> <span class="n">query</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Uses the tweepy Cursor to wrap a twitter api search for the query string</span>
