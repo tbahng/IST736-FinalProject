@@ -6,6 +6,7 @@ Team members:
   - Lauren Lawless
   - Alex Manso
   - Thomas Bahng
+  - Matt Kruse
 
 The objective of the project is to use the main skills taught in this class to solve a real text mining problem.
 
