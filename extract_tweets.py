@@ -9,6 +9,7 @@ import json
 import pandas as pd 
 import numpy as np 
 import re 
+import datetime
 
 """Authorization codes and data tools for using the Twitter REST API
 These are authorization codes from personal Twitter developer account
@@ -42,10 +43,6 @@ def oauth_login():
 # setup API
 api = oauth_login()
 
-# begin logging output
-f = open("log.txt", "w")
-sys.stdout = f
-
 # read People.xlsx to acquire twitter handle information
 fname = "data/People.xlsx"
 if os.path.isfile(fname):    
@@ -53,7 +50,7 @@ if os.path.isfile(fname):
     people['Handle'] = people['Handle'].fillna('-')   
     # list of all handles
     hlist = sorted([h for h in people['Handle'] if not h == '-']) 
-    #hlist = hlist[:3]
+    hlist = hlist[:3]
     print("Getting tweets for {:d} Twitter handles".format(len(hlist)))    
     # dictionary containing list of tweets respective to handles (keys)
     from time import time
@@ -65,6 +62,10 @@ if os.path.isfile(fname):
             search_results = [status for status in tweepy.Cursor(api.user_timeline, id = handle, wait_on_rate_limit=True).items()]
             # format tweet as json
             tweets = [tweet._json for tweet in search_results]
+            # filter for english tweets
+            tweets = [tweet for tweet in tweets if tweet['lang'] == 'en']
+            # subset to just text and created_at
+            tweets = [{k: tweet[k] for k in ('text','created_at')} for tweet in tweets]
             user_tweets[handle] = tweets
         except Exception as e:
             print(e, "handle: {:s}".format(handle))
@@ -84,8 +85,7 @@ print("A total of {:d} tweets have been collected".format(tweets_count))
 get_date
 check_date
 """
-import time
-import datetime
+#import time
 def get_date(created_at):
     """Function to convert Twitter created_at to date format
     Argument:
@@ -116,14 +116,6 @@ for handle in user_tweets.keys():
     start = min(datelist)
     end = max(datelist)
     print(handle, len(user_tweets[handle]), "from: {:s} to: {:s}".format(start, end))
-	
-##################################################	
-# filtering	& subsetting
-# tweet['lang] == 'en' # filter
-# tweet['text'] # subset
-# tweet['user']['name'] # user name
-##################################################
-
 
 # save tweets to json file
 fname = '_'.join(['data/extract_tweets', str(datetime.datetime.today())[:10]]) + '.json'
@@ -131,6 +123,3 @@ fname = '_'.join(['data/extract_tweets', str(datetime.datetime.today())[:10]]) +
 with bz2.BZ2File(fname, 'w') as fout:
     fout.write(json.dumps(user_tweets).encode('utf-8'))
 print("Results saved in {:s}".format(fname))
-
-# stop logging output
-f.close()
