@@ -15,10 +15,10 @@ import datetime
 These are authorization codes from personal Twitter developer account
 https://apps.twitter.com/
 """
-CONSUMER_KEY = 'CLGwrn0f9T3WR2wXkd3lFV1EO'
-CONSUMER_SECRET = 'bV5bdhraV0NqpuvsxX5Is11ifFLRjA5A3gKgISZEDKVf8GWTlN'
-OAUTH_TOKEN = '1196644023189958656-fcpt4n3ddOuCZgpBLoaxsm7aFtZdAd'
-OAUTH_SECRET = 'Ho8xgK8rfHPovI5qvddc7SiQqipN7VAsOxNfMdtjuDocn'
+CONSUMER_KEY = ''
+CONSUMER_SECRET = ''
+OAUTH_TOKEN = ''
+OAUTH_SECRET = ''
 
 def oauth_login():
     """login to Twitter with ordinary rate limiting
