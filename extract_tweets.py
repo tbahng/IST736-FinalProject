@@ -1,0 +1,136 @@
+"""This file reads People.xlsx and queries Twitter for every handle/screen name in the file.
+"""
+
+import tweepy
+import os
+import sys
+import bz2 
+import json 
+import pandas as pd 
+import numpy as np 
+import re 
+
+"""Authorization codes and data tools for using the Twitter REST API
+These are authorization codes from personal Twitter developer account
+https://apps.twitter.com/
+"""
+CONSUMER_KEY = 'CLGwrn0f9T3WR2wXkd3lFV1EO'
+CONSUMER_SECRET = 'bV5bdhraV0NqpuvsxX5Is11ifFLRjA5A3gKgISZEDKVf8GWTlN'
+OAUTH_TOKEN = '1196644023189958656-fcpt4n3ddOuCZgpBLoaxsm7aFtZdAd'
+OAUTH_SECRET = 'Ho8xgK8rfHPovI5qvddc7SiQqipN7VAsOxNfMdtjuDocn'
+
+def oauth_login():
+    """login to Twitter with ordinary rate limiting
+    needs defined authorization codes for personal twitter developer application
+    CONSUMER_KEY (consumer api key)
+    CONSUMER_SECRET (consumer api secret key)
+    OAUTH_TOKEN (access token)
+    OAUTH_SECRET (access token secret)
+    Returns:
+        [tweepy.api.API] -- [tweepy api]
+    """
+    # get the authorization from Twitter and save in the Tweepy package
+    auth = tweepy.OAuthHandler(CONSUMER_KEY,CONSUMER_SECRET)
+    auth.set_access_token(OAUTH_TOKEN,OAUTH_SECRET)
+    tweepy_api = tweepy.API(auth)
+    # if a null api is returned, give error message
+    if (not tweepy_api):
+        print ("Problem Connecting to API with OAuth")
+        # return the Twitter api object that allows access for the Tweepy api functions
+    return tweepy_api
+
+# setup API
+api = oauth_login()
+
+# begin logging output
+f = open("log.txt", "w")
+sys.stdout = f
+
+# read People.xlsx to acquire twitter handle information
+fname = "data/People.xlsx"
+if os.path.isfile(fname):    
+    people = pd.read_excel(fname, sheet_name="All")
+    people['Handle'] = people['Handle'].fillna('-')   
+    # list of all handles
+    hlist = sorted([h for h in people['Handle'] if not h == '-']) 
+    #hlist = hlist[:3]
+    print("Getting tweets for {:d} Twitter handles".format(len(hlist)))    
+    # dictionary containing list of tweets respective to handles (keys)
+    from time import time
+    t0 = time() # start the cloc
+    user_tweets = {}
+    for handle in hlist:
+        try:
+            # get all available tweets from index for this twitter handle
+            search_results = [status for status in tweepy.Cursor(api.user_timeline, id = handle, wait_on_rate_limit=True).items()]
+            # format tweet as json
+            tweets = [tweet._json for tweet in search_results]
+            user_tweets[handle] = tweets
+        except Exception as e:
+            print(e, "handle: {:s}".format(handle))
+    print("done in %0.3fs" % (time() - t0)) # time elapsed
+    print("number of users collected: {:d}".format(len(user_tweets.keys())))
+else:
+    sys.exit("File not found: People.xlsx")
+
+# summarize total number of tweets collected
+tweets_count = 0
+for user in user_tweets.keys():
+    for tweet in user_tweets[user]:
+        tweets_count += 1
+print("A total of {:d} tweets have been collected".format(tweets_count))
+
+"""Functions for exploring tweets
+get_date
+check_date
+"""
+import time
+import datetime
+def get_date(created_at):
+    """Function to convert Twitter created_at to date format
+    Argument:
+        created_at {[str]} -- [raw tweet creation date time stamp]
+    Returns:
+        [str] -- [date e.g. '2020-04-18']
+    """
+    dt_obj = datetime.datetime.strptime(created_at, '%a %b %d %H:%M:%S +0000 %Y')
+    dt_str = datetime.datetime.strftime(dt_obj, '%Y-%m-%d')
+    return dt_str
+
+def check_date(created_at, start, end):
+    """Function to check whether twitter created_at time stamp is between two dates
+    Argument:
+        created_at {[str]} -- [raw tweet creation date time stamp]
+        start {[str]} -- [start date of timeframe e.g. '2018-01-01']
+        end {[str]} -- [end date of timeframe e.g. '2019-03-31']
+    Returns:
+        [bool] -- [True or False]
+    """
+    x = get_date(created_at)
+    return x <= end and x >= start
+
+# print the number of tweets and timeframe of tweets by user
+for handle in user_tweets.keys():
+    tweets = user_tweets[handle]
+    datelist = [get_date(tweet['created_at']) for tweet in tweets]
+    start = min(datelist)
+    end = max(datelist)
+    print(handle, len(user_tweets[handle]), "from: {:s} to: {:s}".format(start, end))
+	
+##################################################	
+# filtering	& subsetting
+# tweet['lang] == 'en' # filter
+# tweet['text'] # subset
+# tweet['user']['name'] # user name
+##################################################
+
+
+# save tweets to json file
+fname = '_'.join(['data/extract_tweets', str(datetime.datetime.today())[:10]]) + '.json'
+
+with bz2.BZ2File(fname, 'w') as fout:
+    fout.write(json.dumps(user_tweets).encode('utf-8'))
+print("Results saved in {:s}".format(fname))
+
+# stop logging output
+f.close()
