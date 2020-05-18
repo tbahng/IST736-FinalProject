@@ -10,6 +10,7 @@ import pandas as pd
 import numpy as np 
 import re 
 import datetime
+import random
 
 """Authorization codes and data tools for using the Twitter REST API
 These are authorization codes from personal Twitter developer account
@@ -43,14 +44,28 @@ def oauth_login():
 # setup API
 api = oauth_login()
 
+###########################################################
 # read People.xlsx to acquire twitter handle information
+# extract english language tweet text and created_at data
+###########################################################
 fname = "data/People.xlsx"
 if os.path.isfile(fname):    
     people = pd.read_excel(fname, sheet_name="All")
-    people['Handle'] = people['Handle'].fillna('-')   
+    people['Handle'] = people['Handle'].fillna('-')       
+    # handles for 2020 candidates
+    hlist_2020_candidates = sorted([h for h in people.loc[people['Ran 2020'] == 1, 'Handle'] if not h == '-'])
+    # handles for 2016 candidates
+    hlist_2016_candidates = sorted([h for h in people.loc[people['Ran 2016'] == 1, 'Handle'] if not h == '-'])
+    # handles for all candidates
+    hlist_all_candidates = sorted(list(set(hlist_2016_candidates + hlist_2020_candidates)))
+    # handles for non candidates in both 2016 and 2020
+    hlist_non_candidates = sorted([h for h in people.loc[(people['Ran 2020'] == 0) & (people['Ran 2016'] == 0), 'Handle'] if not h == '-'])
+    # balanced random sample of non candidates
+    random.seed(11)
+    random.shuffle(hlist_non_candidates)
+    hlist_non_candidates = hlist_non_candidates[:len(hlist_all_candidates)]
     # list of all handles
-    hlist = sorted([h for h in people['Handle'] if not h == '-']) 
-    hlist = hlist[:3]
+    hlist = hlist_all_candidates + hlist_non_candidates
     print("Getting tweets for {:d} Twitter handles".format(len(hlist)))    
     # dictionary containing list of tweets respective to handles (keys)
     from time import time
@@ -74,6 +89,9 @@ if os.path.isfile(fname):
 else:
     sys.exit("File not found: People.xlsx")
 
+###########################################################
+# validate tweet info
+###########################################################
 # summarize total number of tweets collected
 tweets_count = 0
 for user in user_tweets.keys():
@@ -111,13 +129,18 @@ def check_date(created_at, start, end):
 
 # print the number of tweets and timeframe of tweets by user
 for handle in user_tweets.keys():
-    tweets = user_tweets[handle]
-    datelist = [get_date(tweet['created_at']) for tweet in tweets]
-    start = min(datelist)
-    end = max(datelist)
-    print(handle, len(user_tweets[handle]), "from: {:s} to: {:s}".format(start, end))
+    try:
+        tweets = user_tweets[handle]
+        datelist = [get_date(tweet['created_at']) for tweet in tweets]
+        start = min(datelist)
+        end = max(datelist)
+        print(handle, len(user_tweets[handle]), "from: {:s} to: {:s}".format(start, end))
+    except Exception as e:
+        print(e, "handle: {:s}".format(handle))
 
+###########################################################
 # save tweets to json file
+###########################################################
 fname = '_'.join(['data/extract_tweets', str(datetime.datetime.today())[:10]]) + '.json'
 
 with bz2.BZ2File(fname, 'w') as fout:
