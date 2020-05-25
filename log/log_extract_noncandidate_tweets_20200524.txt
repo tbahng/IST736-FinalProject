@@ -1,0 +1,61 @@
+Getting tweets for 55 Twitter handles
+Twitter error response: status code = 404 handle: JimInjofe
+done in 7087.719s
+number of users collected: 55
+A total of 146585 tweets have been collected
+min() arg is an empty sequence handle: Steve_Beshear
+RepFinkenauer 583 from: 2019-01-05 to: 2020-05-22
+JerryNadler 1113 from: 2012-06-27 to: 2020-05-23
+PramilaJayapal 3152 from: 2018-05-31 to: 2020-05-24
+SenSchumer 3177 from: 2018-12-18 to: 2020-05-24
+HurdOnTheHill 3180 from: 2016-10-31 to: 2020-05-21
+RepGosar 3133 from: 2019-01-10 to: 2020-05-23
+MicheleBachmann 3210 from: 2012-05-07 to: 2017-02-16
+SenatorIsakson 3209 from: 2017-06-07 to: 2020-04-14
+MarkMeadows 3155 from: 2014-05-19 to: 2020-03-10
+RepRonEstes 1424 from: 2017-04-21 to: 2020-05-22
+JahanaHayesCT 1167 from: 2018-05-02 to: 2020-05-23
+neilabercrombie 3083 from: 2013-03-04 to: 2014-12-01
+georgeallenva 3216 from: 2010-05-14 to: 2020-05-23
+SenMarkey 3212 from: 2018-08-09 to: 2020-05-24
+SenatorCollins 3178 from: 2012-05-24 to: 2020-05-23
+RepAlGreen 2278 from: 2010-06-17 to: 2020-05-21
+SenStabenow 3195 from: 2016-09-27 to: 2020-05-24
+RepEdCase 833 from: 2019-01-07 to: 2020-05-24
+RonJohnsonWI 3207 from: 2015-12-17 to: 2020-04-14
+SenatorTester 3161 from: 2016-06-28 to: 2020-05-22
+maziehirono 3178 from: 2013-07-25 to: 2020-05-22
+PatrickMurphyFL 3132 from: 2012-03-09 to: 2020-04-09
+SenToomey 3192 from: 2013-10-31 to: 2020-05-22
+jackiewalorski 2979 from: 2008-04-28 to: 2020-05-08
+Liz_Cheney 2104 from: 2012-02-14 to: 2020-05-23
+GregAbbott_TX 3146 from: 2017-09-21 to: 2020-05-24
+RepThomasMassie 3086 from: 2018-12-28 to: 2020-05-24
+RepDougCollins 3223 from: 2015-04-14 to: 2020-05-23
+RepJimMatheson 1168 from: 2009-06-10 to: 2014-10-17
+RepTierney 1766 from: 2011-10-05 to: 2020-05-04
+JeffLandry 2344 from: 2011-01-12 to: 2020-05-24
+DarrellIssa 3191 from: 2014-09-17 to: 2020-05-24
+IlhanMN 3010 from: 2019-08-25 to: 2020-05-24
+TedYoho 1371 from: 2011-05-02 to: 2019-12-31
+GovHowardDean 3156 from: 2020-03-26 to: 2020-05-24
+MattBevin 3141 from: 2015-08-03 to: 2020-04-21
+RepDebHaaland 3189 from: 2019-01-03 to: 2020-05-24
+SenShelby 2609 from: 2011-04-28 to: 2020-05-22
+katieporteroc 2974 from: 2012-06-24 to: 2020-05-24
+Sen_JoeManchin 3198 from: 2017-01-04 to: 2020-05-24
+GovHawaii 3074 from: 2018-08-24 to: 2020-05-24
+MittRomney 1909 from: 2009-07-08 to: 2020-05-16
+GinaRaimondo 2812 from: 2010-02-17 to: 2020-02-21
+EliseStefanik 3164 from: 2018-07-22 to: 2020-05-24
+RepScottPerry 3168 from: 2013-11-22 to: 2020-05-22
+BrianKempGA 3187 from: 2018-07-19 to: 2020-05-24
+BenMcAdams 1614 from: 2011-03-04 to: 2020-05-20
+JenniferWexton 3181 from: 2015-10-21 to: 2020-05-23
+GovMikeDeWine 3098 from: 2019-10-23 to: 2020-05-24
+MikeCrapo 3170 from: 2016-01-20 to: 2020-05-22
+NedLamont 1627 from: 2018-01-17 to: 2020-03-11
+TomCottonAR 3183 from: 2014-01-09 to: 2020-05-24
+MassGovernor 3226 from: 2018-03-03 to: 2020-05-24
+keithellison 3149 from: 2019-03-29 to: 2020-05-24
+Results saved in data/extract_noncandidate_tweets.json
