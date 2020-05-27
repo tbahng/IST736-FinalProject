@@ -1,14 +1,24 @@
 """
-This file adds a column 'text' to 'data/People.xlsx'
-for tweet text from "data/extract_candidate_tweets.json" and 
+This file creates a single data frame from tweet text 
+from "data/extract_candidate_tweets.json" and 
 "data/extract_noncandidate_tweets.json"
 so that data can be explored, analyzed and modeled.
 
-Addresable tweet text is as follows:
+Relevant tweet text for modeling is as follows:
     Tweets that were created from 2018-01-01 to 2018-12-31
+However, due to the small sample size of that data,
+candidacy announcement dates will be added as an attribute to 
+help identify any tweets that were created before this date
 
-Records of 'data/People.xlsx' is subset to only handles for which
-there is tweet text.
+Key Fields in tweets dataframe:
+- handle: screen name of user
+- user_name: name of user
+- candidate_2020
+- join_2020
+- candidate_2016
+- join_2016
+- tweet_text
+- tweet_created_at
 
 Results saved to 'data/data.csv'
 """
@@ -26,8 +36,8 @@ def get_date(created_at):
         [str] -- [date e.g. '2020-04-18']
     """
     dt_obj = datetime.datetime.strptime(created_at, '%a %b %d %H:%M:%S +0000 %Y')
-    dt_str = datetime.datetime.strftime(dt_obj, '%Y-%m-%d')
-    return dt_str
+    #dt_str = datetime.datetime.strftime(dt_obj, '%Y-%m-%d')
+    return dt_obj
 
 def check_date(created_at, start, end):
     """Function to check whether twitter created_at time stamp is between two dates
@@ -77,32 +87,26 @@ for key in keys_drop:
 all_tweets_collected = {**candidate_data, **noncandidate_data}
 
 ##################################################
-# create new dictionary of only tweets 
-# from Jan-Dec 2018
+# convert tweets to dataframe
 ##################################################
-tweets = {}
-for handle in all_tweets_collected.keys():
-    tweets_list = [] # initialize tweets to keep
-    # only keep tweets within specified timeframe
-    for tweet in all_tweets_collected[handle]:
-        if check_date(tweet['created_at'], '2018-01-01', '2018-12-31'):
-            tweets_list.append(tweet['text'])
-        else:
-            continue 
-    if len(tweets_list) > 0:
-        tweets[handle] = tweets_list
+def to_df(handle):
+    criteria = df['Handle'] == handle
+    tmp = df.loc[criteria,:]
+    dat = pd.DataFrame(all_tweets_collected[handle])
+    dat['created_at'] = dat['created_at'].apply(get_date)
+    dat['handle'] = handle 
+    dat['user_name'] = tmp['Name'].values[0]
+    dat['candidate_2020'] = tmp['Ran 2020'].isin([1]).values[0]
+    dat['join_2020'] = tmp['2020 Join'].values[0]
+    dat['candidate_2016'] = tmp['Ran 2016'].isin([1]).values[0]
+    dat['join_2016'] = tmp['2016 Join'].values[0]
+    return dat.iloc[:, [2,3,4,5,6,7,0,1]]
 
-# list of all twitter handles with tweets
-handle_list = list(tweets.keys())
-
-# subset people dataframe for only these handles
-dfsub = df.loc[df['Handle'].isin(handle_list),:]
-
-# add column for tweet text to people dataframe
-dfsub['text'] = [' '.join(tweets[handle]) for handle in dfsub['Handle']]
+df_list = [to_df(handle) for handle in all_tweets_collected.keys()]
+df_tweets = pd.concat(df_list)
 
 ##################################################
 # save to file
 ##################################################
 fname = 'data/data.csv'
-dfsub.to_csv(fname, index = None)
+df_tweets.to_csv(fname, index = None)
