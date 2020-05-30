@@ -1,0 +1,38 @@
+---
+title: "IST 736 - Final Project"
+author: "Thomas Bahng | Matthew Kruse | Lauren Lawless | Alex Manso"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: 
+  word_document:
+    toc: yes
+    reference_docx: template.docx
+---
+
+```{r, include=FALSE}
+# set global options
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+```
+
+# Introduction
+
+Lorum ipsum.
+
+# Analysis
+
+Lorum ipsum
+
+### About the Data
+
+Lorum ipsum.
+
+### Models
+
+Lorum ipsum.
+
+# Results
+
+Lorum ipsum
+
+# Conclusion
+
+Lorum ipsum.
