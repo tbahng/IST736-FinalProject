@@ -44,7 +44,7 @@ The top 5 states include Massachusetts, New York, California, Texas, and Florida
 
 The following table shows an aggregation of key attributes by political party.
 
-#### Fig.4 Key Attributes
+#### Fig.4 Key Attributes by Party
 ![](img/table_key_attributes_by_party.png)
 
 The majority of those who ran in 2020 were Democrats, contrasting with a Republican majority in the 2016 campaign.
