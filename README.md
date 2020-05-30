@@ -19,7 +19,7 @@ Files related to project data extraction:
   1extract_noncandidate_tweets.py - main file for extracting noncandidate tweets from Twitter  
   2transform_tweets.py - generates data used for modeling  
 
-Files related to exploratory data analysis:
+Files related to exploratory data analysis:  
   3Explore.ipynb - notebook for exploratory data analysis
   
   
