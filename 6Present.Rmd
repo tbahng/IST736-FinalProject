@@ -165,6 +165,20 @@ At an aggregate and without concern for when tweets were created, do the tweets 
 
 * (14) MauriceGravel | GovernorPerry | LincolnChafee | JohnKasich | GovChristie | WayneMessam | MarkSanford | BobbyJindal | gov_gilmore | GovernorPataki | JebBush | RealBenCarson | CarlyFiorina | RickSantorum
 
+Top terms in each cluster were identified using mean term frequency.
+
+#### Fig.24 Top Features: Candidates Cluster
+![](img/plt_top_features_clust_candidates.png)
+
+#### Fig.25 Top Features: Non-Candidates Cluster
+![](img/plt_top_features_clust_noncandidates.png)
+
+Top terms that best distinguish clusters were identified using the F-statistic on the mean difference in groups.
+
+#### Fig.26 Top Distinctive Terms for Clustering
+![](img/plt_top_distinctive_terms.png)
+
+
 
 ### Models
 
