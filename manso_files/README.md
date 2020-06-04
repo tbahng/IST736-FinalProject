@@ -1,6 +1,4 @@
-UPDATE:  
-
-.py files are now in the deliverable folder  
+UPDATE: .py files are now in the deliverable folder  
 
 
 Files for the models: 
