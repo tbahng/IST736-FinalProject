@@ -110,3 +110,10 @@ df_tweets = pd.concat(df_list)
 ##################################################
 fname = 'data/data.csv'
 df_tweets.to_csv(fname, index = None)
+
+
+##################################################
+# sample data for deliverable
+##################################################
+fname = 'data/sample_data.csv'
+df_tweets.head(100).to_csv(fname, index = None)
